@@ -17,7 +17,8 @@
         (setf (getf env :request-id) request-id)
         (let ((response (funcall app env)))
           (declare (type list response))
-          (rplacd (last (second response)) `(:x-request-id ,request-id))
+          (setf (second response)
+                (nconc (second response) `(:x-request-id ,request-id)))
           response))))
   "Lack middleware to add REQUEST-ID to the Clack environment and an X-Request-Id response
 header, for purposes of request correlation and distributed tracing; checks whether header
